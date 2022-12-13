@@ -9,9 +9,13 @@ var _hmt = _hmt || [];
   s.parentNode.insertBefore(hm, s);
 })();
 </script>
-<script  src="https://www.google.com/recaptcha/enterprise.js?render=6LeiPngjAAAAAE5w-Sg69jdBxO_bu_d5hJf0qTs3"></script>
-<script>
-  grecaptcha.enterprise.ready(async () => {
+
+
+
+<head>
+	<script src="https://www.google.com/recaptcha/enterprise.js?render=6LeiPngjAAAAAE5w-Sg69jdBxO_bu_d5hJf0qTs3"></script>
+	<script>
+	grecaptcha.enterprise.ready(async () => {
     const token = await grecaptcha.enterprise.execute('6LeiPngjAAAAAE5w-Sg69jdBxO_bu_d5hJf0qTs3', {action: 'homepage'});
     // IMPORTANT: The 'token' that results from execute is an encrypted response sent by
     // reCAPTCHA Enterprise to the end user's browser.
@@ -19,10 +23,6 @@ var _hmt = _hmt || [];
     // See https://cloud.google.com/recaptcha-enterprise/docs/create-assessment
   });
 </script>
-
-
-<head>
-	<script src="https://www.google.com/recaptcha/enterprise.js?render=6LeiPngjAAAAAE5w-Sg69jdBxO_bu_d5hJf0qTs3"></script>
 	<title>ldx的个人网站 鸣谢与赞助</title>
 	<link rel="stylesheet" href="template">
 <style> 
