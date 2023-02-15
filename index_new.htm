@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>个人主页</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- 头部 -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#about">关于我</a></li>
+                <li><a href="#skills">技能</a></li>
+                <li><a href="#projects">项目</a></li>
+                <li><a href="#contact">联系我</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- 主体 -->
+    <main>
+        <!-- 关于我 -->
+        <section id="about">
+            <div class="container">
+                <h2>关于我</h2>
+                <img src="profile.jpg" alt="我的照片">
+                <p>大家好，我是张三，一名在北京工作的Web开发者。我热衷于打造美丽、响应式的网站，以吸引用户并提高转化率。业余时间我喜欢徒步旅行、弹吉他和和家人一起度过。</p>
+            </div>
+        </section>
+        <!-- 技能 -->
+        <section id="skills">
+            <div class="container">
+                <h2>技能</h2>
+                <ul>
+                    <li>HTML5</li>
+                    <li>CSS3</li>
+                    <li>JavaScript</li>
+                    <li>jQuery</li>
+                    <li>Bootstrap</li>
+                    <li>PHP</li>
+                    <li>MySQL</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 项目 -->
+        <section id="projects">
+            <div class="container">
+                <h2>项目</h2>
+                <div class="project">
+                    <h3>项目1</h3>
+                    <img src="project1.jpg" alt="项目1">
+                    <p>这里是项目1的简介。Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin luctus nisl ac erat
+                        consequat, ac venenatis mauris feugiat. Aenean congue purus nec bibendum lobortis.</p>
+                </div>
+                <div class="project">
+                    <h3>项目2</h3>
+                    <img src="project2.jpg" alt="项目2">
+                    <p>这里是项目2的简介。Nulla facilisi. In quis sapien vehicula, interdum augue nec, tristique nulla. Vivamus
+                        euismod tincidunt augue, a pulvinar dolor eleifend nec.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系我 -->
+        <section id="contact">
+            <div class="container">
+                <h2>联系我</h2>
+                <form action="submit-form.php" method="POST">
+                    <label for="name">姓名：</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="email">邮箱：</label>
+                    <input type="email" id="email" name="email" required <label for="message">留言：</label>
+                    <textarea id="message" name="message"></textarea>
+
+                    <button type="submit">发送</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <!-- 底部 -->
+    <footer>
+        <div class="container">
+            <p>©2021 张三. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+
+</html>
