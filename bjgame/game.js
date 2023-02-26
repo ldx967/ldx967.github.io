@@ -1,125 +1,186 @@
-// 定义游戏对象
-var game = {
-    width: 480,
-    height: 360,
-    ctx: null,
-    platforms: [],
-    player: null,
-    gravity: 0.1,
-    velocity: 0,
-    jumpForce: 5,
-    score: 0,
-    init: function() {
-        // 创建画布
-        var canvas = document.getElementById("gameCanvas");
-        canvas.width = this.width;
-        canvas.height = this.height;
-        this.ctx = canvas.getContext("2d");
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
 
-        // 创建平台
-        this.platforms.push(new Platform(0, 300, 480, 60));
-        this.platforms.push(new Platform(100, 200, 100, 20));
-        this.platforms.push(new Platform(300, 150, 100, 20));
+// 设置游戏参数
+var player = {
+	x: 280,
+	y: 350,
+	width: 40,
+	height: 40,
+	speed: 5,
+	score: 0,
+	hp: 3
+};
+var bullets = [];
+var enemies = [];
+var enemyTimer = 0;
+var enemySpeed = 3;
+var enemyFrequency = 100;
+var gameOver = false;
 
-        // 创建玩家
-        this.player = new Player(50, 200, 20, 20);
-    },
-    update: function() {
-        // 更新玩家状态
-        this.player.y += this.velocity;
-        this.velocity += this.gravity;
-        if (this.player.y > this.height) {
-            this.reset();
+// 绘制游戏元素
+function draw() {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	drawPlayer();
+	drawBullets();
+	drawEnemies();
+	drawScore();
+	drawHP();
+	if (gameOver) {
+		drawGameOver();
+	}
+}
+
+function drawPlayer() {
+	ctx.fillStyle = "blue";
+	ctx.fillRect(player.x, player.y, player.width, player.height);
+}
+
+function drawBullets() {
+	ctx.fillStyle = "red";
+	for (var i = 0; i < bullets.length; i++) {
+		ctx.fillRect(bullets[i].x, bullets[i].y, bullets[i].width, bullets[i].height);
+	}
+}
+
+function drawEnemies() {
+	ctx.fillStyle = "green";
+	for (var i = 0; i < enemies.length; i++) {
+		ctx.fillRect(enemies[i].x, enemies[i].y, enemies[i].width, enemies[i].height);
+	}
+}
+
+function drawScore() {
+	ctx.fillStyle = "black";
+	ctx.font = "20px Arial";
+	ctx.fillText("Score: " + player.score, 10, 25);
+}
+
+function drawHP() {
+	ctx.fillStyle = "black";
+	ctx.font = "20px Arial";
+	ctx.fillText("HP: " + player.hp, 10, 50);
+}
+
+function drawGameOver() {
+	ctx.fillStyle = "red";
+	ctx.font = "50px Arial";
+	ctx.fillText("Game Over", canvas.width / 2 - 150, canvas.height / 2);
+}
+
+// 更新游戏状态
+function update() {
+	updateBullets();
+	updateEnemies();
+	checkCollision();
+	checkGameOver();
+}
+
+function updateBullets() {
+	for (var i = 0; i < bullets.length; i++) {
+		bullets[i].y -= bullets[i].speed;
+		if (bullets[i].y < 0) {
+			bullets.splice(i, 1);
+			i--;
+		}
+	}
+}
+
+function updateEnemies() {
+	enemyTimer++;
+	if (enemyTimer % enemyFrequency === 0) {
+		var enemy = {
+			x: Math.random() * (canvas.width - 40),
+			y: -40,
+			width: 40,
+			height: 40,
+			speed: enemySpeed
+		};
+		enemies.push(enemy);
+	}
+	for (var i = 0; i < enemies.length; i++) {
+		enemies[i].y += enemies[i].speed;
+		if
+        (enemies[i].y > canvas.height) {
+            enemies.splice(i, 1);
+            i--;
         }
+    }
+}
 
-        // 检查玩家与平台的碰撞
-        for (var i = 0; i < this.platforms.length; i++) {
-            var p = this.platforms[i];
-            if (this.player.x + this.player.width > p.x && this.player.x < p.x + p.width) {
-                if (this.player.y + this.player.height > p.y && this.player.y < p.y + p.height) {
-                    this.velocity = 0;
-                    this.player.y = p.y - this.player.height;
-                    if (!p.isJumped) {
-                        this.score++;
-                        p.isJumped = true;
-                    }
-                }
-            }
-        }
-    },
-    draw: function() {
-        // 绘制背景和分数
-        this.ctx.fillStyle = "#FFFFFF";
-        this.ctx.fillRect(0, 0, this.width, this.height);
-        this.ctx.fillStyle = "#000000";
-        this.ctx.fillText("Score: " + this.score, 10, 20);
+function checkCollision() {
+for (var i = 0; i < bullets.length; i++) {
+for (var j = 0; j < enemies.length; j++) {
+if (bullets[i].x < enemies[j].x + enemies[j].width &&
+bullets[i].x + bullets[i].width > enemies[j].x &&
+bullets[i].y < enemies[j].y + enemies[j].height &&
+bullets[i].y + bullets[i].height > enemies[j].y) {
+bullets.splice(i, 1);
+i--;
+enemies.splice(j, 1);
+j--;
+player.score++;
+enemySpeed += 0.2;
+enemyFrequency -= 2;
+if (enemyFrequency < 20) {
+enemyFrequency = 20;
+}
+}
+}
+}
+for (var i = 0; i < enemies.length; i++) {
+if (player.x < enemies[i].x + enemies[i].width &&
+player.x + player.width > enemies[i].x &&
+player.y < enemies[i].y + enemies[i].height &&
+player.y + player.height > enemies[i].y) {
+enemies.splice(i, 1);
+i--;
+player.hp--;
+if (player.hp === 0) {
+gameOver = true;
+}
+}
+}
+}
 
-        // 绘制平台和玩家
-        for (var i = 0; i < this.platforms.length; i++) {
-            this.platforms[i].draw(this.ctx);
-        }
-        this.player.draw(this.ctx);
-    },
-    reset: function() {
-        // 重置游戏状态
-        this.score = 0;
-        this.velocity = 0;
-        this.player.x = 50;
-        this.player.y = 200;
-        for (var i = 0; i <
-            this.platforms.length; i++) {
-                this.platforms[i].isJumped = false;
-            }
-        },
-        jump: function() {
-            // 处理玩家跳跃事件
-            if (this.velocity == 0) {
-                this.velocity -= this.jumpForce;
-            }
-        }
-    };
+function checkGameOver() {
+if (gameOver) {
+bullets = [];
+enemies = [];
+}
+}
 
-    // 定义平台对象
-    function Platform(x, y, width, height) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.color = "#FF0000";
-    this.isJumped = false;
-    }
-    
-    Platform.prototype.draw = function(ctx) {
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
-    
-    // 定义玩家对象
-    function Player(x, y, width, height) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.color = "#0000FF";
-    }
-    
-    Player.prototype.draw = function(ctx) {
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
-    
-    // 处理键盘事件
-    document.addEventListener("keydown", function(e) {
-    if (e.keyCode == 32) {
-    game.jump();
-    }
-    });
-    
-    // 初始化游戏
-    game.init();
-    
-    // 循环更新和绘制游戏
-    setInterval(function() {
-    game.update();
-    game.draw();
-    }, 1000 / 60);        
+// 处理用户输入
+document.addEventListener("keydown", function(event) {
+if (event.keyCode === 37) { // Left
+player.x -= player.speed;
+if (player.x < 0) {
+player.x = 0;
+}
+} else if (event.keyCode === 39) { // Right
+player.x += player.speed;
+if (player.x + player.width > canvas.width) {
+player.x = canvas.width - player.width;
+}
+} else if (event.keyCode === 32) { // Space
+var bullet = {
+x: player.x + player.width / 2 - 5,
+y: player.y - 10,
+width: 10,
+height: 10,
+speed: 10
+};
+bullets.push(bullet);
+}
+});
+
+// 游戏循环
+function gameLoop() {
+draw();
+update();
+if (!gameOver) {
+requestAnimationFrame(gameLoop);
+}
+}
+
+gameLoop();
