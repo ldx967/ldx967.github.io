@@ -1,43 +1,103 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Notepad</title>
+    <title>Notepad</title>
 </head>
+
 <body>
-	<h1>记事本</h1>
-	<label for="select-save">选择存档：</label>
-	<select id="select-save" onchange="loadNote()">
-		<option value="">请选择存档</option>
-		<option value="save1">存档1</option>
-		<option value="save2">存档2</option>
-		<option value="save3">存档3</option>
-	</select>
-	<br>
-	<textarea id="notepad" rows="10" cols="50"></textarea>
-	<br>
-	<button onclick="saveNote()">保存</button>
+    <h1>记事本</h1>
+    <label for="save-name">存档名称：</label>
+    <input type="text" id="save-name">
+    <button onclick="saveNote()">保存</button>
+    <br>
+    <ul id="saved-notes">
+        <li><a href="#" onclick="loadNote(); return false;">新建存档</a></li>
+    </ul>
+    <br>
+    <textarea id="notepad" rows="10" cols="50"></textarea>
+    <br>
+    <button onclick="browseSavedNotes()">浏览所有存档</button>
 
-	<script>
-		// 保存文本到指定的存档
-		function saveNote() {
-			var note = document.getElementById("notepad").value;
-			var selectedSave = document.getElementById("select-save").value;
-			if (selectedSave) {
-				localStorage.setItem(selectedSave, note);
-				alert("已保存！");
-			} else {
-				alert("请选择一个存档！");
-			}
-		}
+    <script>
+        // 保存文本到指定的存档
+        function saveNote() {
+            var note = document.getElementById("notepad").value;
+            var saveName = document.getElementById("save-name").value;
+            if (saveName) {
+                localStorage.setItem(saveName, note);
+                alert("已保存！");
+                refreshSavedNotes();
+            } else {
+                alert("请输入存档名称！");
+            }
+        }
 
-		// 加载选定的存档
-		function loadNote() {
-			var selectedSave = document.getElementById("select-save").value;
-			if (selectedSave) {
-				var note = localStorage.getItem(selectedSave);
-				document.getElementById("notepad").value = note;
-			}
-		}
-	</script>
+        // 加载选定的存档
+        function loadNote() {
+            var savedNotes = document.getElementById("saved-notes");
+            var selectedSave = savedNotes.options[savedNotes.selectedIndex].value;
+            if (selectedSave) {
+                var note = localStorage.getItem(selectedSave);
+                document.getElementById("notepad").value = note;
+            } else {
+                document.getElementById("notepad").value = '';
+            }
+        }
+
+        // 刷新已保存的存档列表
+        function refreshSavedNotes() {
+            var savedNotes = document.getElementById("saved-notes");
+            savedNotes.innerHTML = '';
+            var newNoteOption = document.createElement("li");
+            var newNoteLink = document.createElement("a");
+            newNoteLink.href = "#";
+            newNoteLink.textContent = "新建存档";
+            newNoteLink.onclick = function () {
+                document.getElementById("notepad").value = '';
+                document.getElementById("save-name").value = '';
+                return false;
+            }
+            newNoteOption.appendChild(newNoteLink);
+            savedNotes.appendChild(newNoteOption);
+            for (var i = 0; i < localStorage.length; i++) {
+                var key = localStorage.key(i);
+                if (key !== null && key !== undefined && key !== "") {
+                    var savedNoteOption = document.createElement("li");
+                    var savedNoteLink = document.createElement("a");
+                    savedNoteLink.href = "#";
+                    savedNoteLink.textContent = key;
+                    savedNoteLink.onclick = function () {
+                        loadNote();
+                        return false;
+                    }
+                    savedNoteOption.appendChild(savedNoteLink);
+                    savedNotes.appendChild(savedNoteOption);
+                }
+            }
+        }
+
+        // 页面加载时刷新已保存的存档列表
+        window.onload = function () {
+            refreshSavedNotes();
+        }
+
+        // 浏览所有存档
+        function browseSavedNotes() {
+            var savedNotesTable = "<table><tr><th>存档名称</th><th>存档内容</th></tr>";
+            for (var i = 0; i < localStorage.length; i++) {
+                var key = localStorage.key(i);
+                if (key !== null && key !== undefined && key !== "") {
+                    var note = localStorage.getItem(key);
+                    savedNotesTable<tr><td>" + key + "</td><td>" + note + "</td></tr>";
+                }
+            }
+            savedNotesTable += "</table>";
+            var browseWindow = window.open("", "浏览存档", "width=800,height=600,scrollbars=yes,resizable=yes");
+            browseWindow.document.write(savedNotesTable);
+        }
+    </script>
+
 </body>
+
 </html>
