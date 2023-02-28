@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Notepad</title>
+    <title>记事本</title>
 </head>
 
 <body>
@@ -11,9 +11,7 @@
     <input type="text" id="save-name">
     <button onclick="saveNote()">保存</button>
     <br>
-    <ul id="saved-notes">
-        <li><a href="#" onclick="loadNote(); return false;">新建存档</a></li>
-    </ul>
+    <ul id="saved-notes"></ul>
     <br>
     <textarea id="notepad" rows="10" cols="50"></textarea>
     <br>
@@ -25,7 +23,9 @@
             var note = document.getElementById("notepad").value;
             var saveName = document.getElementById("save-name").value;
             if (saveName) {
-                localStorage.setItem(saveName, note);
+                var savedNotes = JSON.parse(localStorage.getItem("savedNotes")) || {};
+                savedNotes[saveName] = note;
+                localStorage.setItem("savedNotes", JSON.stringify(savedNotes));
                 alert("已保存！");
                 refreshSavedNotes();
             } else {
@@ -35,11 +35,10 @@
 
         // 加载选定的存档
         function loadNote() {
-            var savedNotes = document.getElementById("saved-notes");
-            var selectedSave = savedNotes.options[savedNotes.selectedIndex].value;
-            if (selectedSave) {
-                var note = localStorage.getItem(selectedSave);
-                document.getElementById("notepad").value = note;
+            var savedNotes = JSON.parse(localStorage.getItem("savedNotes")) || {};
+            var selectedSave = document.getElementById("saved-notes").value;
+            if (selectedSave && savedNotes[selectedSave]) {
+                document.getElementById("notepad").value = savedNotes[selectedSave];
             } else {
                 document.getElementById("notepad").value = '';
             }
@@ -47,8 +46,9 @@
 
         // 刷新已保存的存档列表
         function refreshSavedNotes() {
-            var savedNotes = document.getElementById("saved-notes");
-            savedNotes.innerHTML = '';
+            var savedNotes = JSON.parse(localStorage.getItem("savedNotes")) || {};
+            var savedNotesList = document.getElementById("saved-notes");
+            savedNotesList.innerHTML = '';
             var newNoteOption = document.createElement("li");
             var newNoteLink = document.createElement("a");
             newNoteLink.href = "#";
@@ -59,10 +59,9 @@
                 return false;
             }
             newNoteOption.appendChild(newNoteLink);
-            savedNotes.appendChild(newNoteOption);
-            for (var i = 0; i < localStorage.length; i++) {
-                var key = localStorage.key(i);
-                if (key !== null && key !== undefined && key !== "") {
+            savedNotesList.appendChild(newNoteOption);
+            for (var key in savedNotes) {
+                if (savedNotes.hasOwnProperty(key)) {
                     var savedNoteOption = document.createElement("li");
                     var savedNoteLink = document.createElement("a");
                     savedNoteLink.href = "#";
@@ -72,7 +71,7 @@
                         return false;
                     }
                     savedNoteOption.appendChild(savedNoteLink);
-                    savedNotes.appendChild(savedNoteOption);
+                    savedNotesList.appendChild(savedNoteOption);
                 }
             }
         }
@@ -84,18 +83,16 @@
 
         // 浏览所有存档
         function browseSavedNotes() {
+            var savedNotes = JSON.parse(localStorage.getItem("savedNotes")) || {};
             var savedNotesTable = "<table><tr><th>存档名称</th><th>存档内容</th></tr>";
-            for (var i = 0; i < localStorage.length; i++) {
-                var key = localStorage.key(i);
-                if (key !== null && key !== undefined && key !== "") {
-                    var note = localStorage.getItem(key);
-                    savedNotesTable<tr><td>" + key + "</td><td>" + note + "</td></tr>";
-                }
-            }
-            savedNotesTable += "</table>";
-            var browseWindow = window.open("", "浏览存档", "width=800,height=600,scrollbars=yes,resizable=yes");
+            for (var key in savedNotes) {
+                if (savedNotes.hasOwnProperty(key)) {
+                    var note = savedNotes[key];
+                    savedNotesTable +=" </table> ";
+var browseWindow = window.open("", "浏览存档", "width=800,height=600,scrollbars=yes,resizable=yes");
             browseWindow.document.write(savedNotesTable);
         }
+    }}
     </script>
 
 </body>
