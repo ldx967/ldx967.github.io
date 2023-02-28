@@ -10,21 +10,22 @@
 	<button onclick="saveNote()">保存</button>
 
 	<script>
-		// 将文本保存到cookie中
+		// 将文本保存到localStorage中
 		function saveNote() {
 			var note = document.getElementById("notepad").value;
-			document.cookie = "note=" + note;
+			localStorage.setItem("note", note);
 			alert("已保存！");
 		}
 
-		// 当页面加载时，检查cookie是否存在
+		// 当页面加载时，检查localStorage是否存在
 		window.onload = function() {
-			if (document.cookie.indexOf("note=") != -1) {
-				// 从cookie中读取文本
-				var note = document.cookie.split("=")[1];
+			if (localStorage.getItem("note")) {
+				// 从localStorage中读取文本
+				var note = localStorage.getItem("note");
 				document.getElementById("notepad").value = note;
 			}
 		}
 	</script>
 </body>
 </html>
+
