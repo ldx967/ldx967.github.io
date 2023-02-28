@@ -5,27 +5,39 @@
 </head>
 <body>
 	<h1>记事本</h1>
+	<label for="select-save">选择存档：</label>
+	<select id="select-save" onchange="loadNote()">
+		<option value="">请选择存档</option>
+		<option value="save1">存档1</option>
+		<option value="save2">存档2</option>
+		<option value="save3">存档3</option>
+	</select>
+	<br>
 	<textarea id="notepad" rows="10" cols="50"></textarea>
 	<br>
 	<button onclick="saveNote()">保存</button>
 
 	<script>
-		// 将文本保存到localStorage中
+		// 保存文本到指定的存档
 		function saveNote() {
 			var note = document.getElementById("notepad").value;
-			localStorage.setItem("note", note);
-			alert("已保存！");
+			var selectedSave = document.getElementById("select-save").value;
+			if (selectedSave) {
+				localStorage.setItem(selectedSave, note);
+				alert("已保存！");
+			} else {
+				alert("请选择一个存档！");
+			}
 		}
 
-		// 当页面加载时，检查localStorage是否存在
-		window.onload = function() {
-			if (localStorage.getItem("note")) {
-				// 从localStorage中读取文本
-				var note = localStorage.getItem("note");
+		// 加载选定的存档
+		function loadNote() {
+			var selectedSave = document.getElementById("select-save").value;
+			if (selectedSave) {
+				var note = localStorage.getItem(selectedSave);
 				document.getElementById("notepad").value = note;
 			}
 		}
 	</script>
 </body>
 </html>
-
