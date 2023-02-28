@@ -15,7 +15,6 @@
     <br>
     <textarea id="notepad" rows="10" cols="50"></textarea>
     <br>
-    <button onclick="browseSavedNotes()">浏览所有存档</button>
 
     <script>
         // 保存文本到指定的存档
@@ -82,17 +81,6 @@
         }
 
         // 浏览所有存档
-        function browseSavedNotes() {
-            var savedNotes = JSON.parse(localStorage.getItem("savedNotes")) || {};
-            var savedNotesTable = "<table><tr><th>存档名称</th><th>存档内容</th></tr>";
-            for (var key in savedNotes) {
-                if (savedNotes.hasOwnProperty(key)) {
-                    var note = savedNotes[key];
-                    savedNotesTable +=" </table> ";
-var browseWindow = window.open("", "浏览存档", "width=800,height=600,scrollbars=yes,resizable=yes");
-            browseWindow.document.write(savedNotesTable);
-        }
-    }}
     </script>
 
 </body>
