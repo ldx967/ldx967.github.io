@@ -19,12 +19,17 @@
     <link rel="stylesheet" href="template">
     <link rel="shortcut icon" href="favicon.ico">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-        }
+        body { background-image: linear-gradient(135deg, red, blue); } 
+body::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background-color: #fff9;
+}
+
 
         .header {
             background-color: #ffffff;
