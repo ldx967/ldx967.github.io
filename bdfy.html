@@ -1,0 +1,85 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>文本翻译器</title>
+</head>
+<body>
+  <label for="input">请输入中文：</label>
+  <textarea id="input" rows="5" cols="50"></textarea>
+  <br>
+  <label for="loop-count">请输入循环次数：</label>
+  <input type="number" id="loop-count" value="1">
+  <br>
+  <button onclick="translate()">翻译</button>
+  <br>
+  <label for="output">翻译结果：</label>
+  <textarea id="output" rows="5" cols="50"></textarea>
+
+  <script src="https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+  <script>
+    const APPID = getCookie("APPID");
+    const SECRET_KEY = getCookie("SECRET_KEY");
+    const LANGUAGES = ["en"];
+
+    function translate(text, targetLanguage = "en", sourceLanguage = "auto") {
+      const url = "https://fanyi-api.baidu.com/api/trans/vip/translate";
+      const salt = Math.floor(Math.random() * (65536 - 32768) + 32768).toString();
+      const sign = CryptoJS.MD5(APPID + text + salt + SECRET_KEY).toString();
+      const params = {
+        q: text,
+        from: sourceLanguage,
+        to: targetLanguage,
+        appid: APPID,
+        salt,
+        sign,
+      };
+      return axios.get(url, { params }).then((response) => {
+        if (response.status === 200) {
+          return response.data.trans_result[0].dst;
+        } else {
+          throw new Error("翻译失败！");
+        }
+      });
+    }
+
+    function translateLoop(text, loopCount) {
+      let targetLanguage = LANGUAGES[Math.floor(Math.random() * LANGUAGES.length)];
+      let promise = Promise.resolve(text);
+      for (let i = 0; i < loopCount; i++) {
+        promise = promise.then((text) => {
+          return translate(text, targetLanguage);
+        });
+        targetLanguage = LANGUAGES[Math.floor(Math.random() * LANGUAGES.length)];
+      }
+      return promise;
+    }
+
+    function translate() {
+      const input = document.getElementById("input").value;
+      const loopCount = parseInt(document.getElementById("loop-count").value);
+      const output = document.getElementById("output");
+      output.value = "";
+      translateLoop(input, loopCount)
+        .then((result) => {
+          return translate(result, "zh");
+        })
+        .then((result) => {
+          output.value = result;
+        })
+        .catch((error) => {
+          output.value = error.message;
+        });
+    }
+
+    function getCookie(name) {
+      const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+      if (match) {
+        return match[2];
+      } else {
+        return null;
+      }
+    }
+  </script>
+</body>
+</html>
