@@ -43,14 +43,6 @@
         opacity: 0;
       }
     }
-    .web-iframe {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
   </style>
 </head>
 <body>
@@ -76,24 +68,16 @@
             helloWorldText.style.borderRight = "none";
           }, 300); // Delay of 300 milliseconds (0.3 seconds)
 
-          // Trigger the explosion effect
+          // Trigger the explosion effect after removing the cursor
           setTimeout(function() {
             helloWorldText.style.animation = "explode 0.8s forwards";
-            showWab();
           }, 500); // Delay of 500 milliseconds (0.5 seconds) before the explosion
-        }
-      }
 
-      function showWeb() {
-        var iframe = document.createElement("iframe");
-        iframe.src = "//ldx967.github.io/helloworld.html";
-        iframe.scrolling = "no";
-        iframe.border = "0";
-        iframe.frameBorder = "no";
-        iframe.frameSpacing = "0";
-        iframe.allowFullscreen = "true";
-        iframe.classList.add("web-iframe");
-        document.body.appendChild(iframe);
+          // Redirect to full-screen embedded website after 3 seconds
+          setTimeout(function() {
+            window.location.href = "https://ldx967.github.io/helloworld";
+          }, 3000); // Delay of 3000 milliseconds (3 seconds) for redirection
+        }
       }
 
       typeText(0);
