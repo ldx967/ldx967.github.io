@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,56 +9,79 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       height: 100vh;
       background: linear-gradient(135deg, #3498db, #2ecc71);
+      color: #fff;
     }
     .container {
-      color: #fff;
-      padding-left: 20px;
+      text-align: left; /* Align the content to the left */
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     }
-    .language-title {
-      font-size: 24px;
-      font-weight: bold;
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+    code {
+      display: block;
+      font-family: "Courier New", monospace;
+      font-size: 16px;
+      padding: 10px;
+      background-color: rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
       margin-bottom: 10px;
-    }
-    .code-example {
-      font-size: 18px;
-      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="language-title">Python</div>
-    <pre class="code-example">
-      <code>print("Hello, World!")</code>
-    </pre>
-    <div class="language-title">C</div>
-    <pre class="code-example">
-      <code>#include &lt;stdio.h&gt;
-int main() {
-    printf("Hello, World!\n");
-    return 0;
-}</code>
-    </pre>
-    <div class="language-title">C++</div>
-    <pre class="code-example">
-      <code>#include &lt;iostream&gt;
-using namespace std;
-
-int main() {
-    cout << "Hello, World!" << endl;
-    return 0;
-}</code>
-    </pre>
-    <div class="language-title">Java</div>
-    <pre class="code-example">
-      <code>public class HelloWorld {
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-    }
-}</code>
-    </pre>
+    <h1>各种编程语言的Hello World示例</h1>
+    <h2>Python</h2>
+    <code>
+      print("Hello, World!")
+    </code>
+    <h2>C</h2>
+    <code>
+      #include &lt;stdio.h&gt;
+      <br>
+      int main() {
+      <br>
+      &nbsp;&nbsp;printf("Hello, World!\n");
+      <br>
+      &nbsp;&nbsp;return 0;
+      <br>
+      }
+    </code>
+    <h2>C++</h2>
+    <code>
+      #include &lt;iostream&gt;
+      <br>
+      int main() {
+      <br>
+      &nbsp;&nbsp;std::cout << "Hello, World!" << std::endl;
+      <br>
+      &nbsp;&nbsp;return 0;
+      <br>
+      }
+    </code>
+    <h2>Java</h2>
+    <code>
+      public class HelloWorld {
+      <br>
+      &nbsp;&nbsp;public static void main(String[] args) {
+      <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Hello, World!");
+      <br>
+      &nbsp;&nbsp;}
+      <br>
+      }
+    </code>
   </div>
 </body>
 </html>
