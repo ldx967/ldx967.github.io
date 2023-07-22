@@ -40,7 +40,7 @@
     }
     .official-page-iframe {
       width: 100%;
-      height: 100%;
+      height: 99%;
       border: none;
     }
     @keyframes typing {
@@ -51,57 +51,3 @@
     @keyframes explode {
       0% {
         transform: scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(3);
-        opacity: 0;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="hello-world-container">
-    <div class="hello-world-text"></div>
-  </div>
-  <div class="official-page-container">
-    <iframe class="official-page-iframe" src="https://ldx967.github.io/helloworld"></iframe>
-  </div>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      var helloWorldText = document.querySelector(".hello-world-text");
-      var officialPageContainer = document.querySelector(".official-page-container");
-      var textToType = "Hello World!";
-      var index = 0;
-
-      function typeText(i) {
-        if (i < textToType.length) {
-          helloWorldText.textContent += textToType.charAt(i);
-          index++;
-          setTimeout(function() {
-            typeText(i + 1);
-          }, 300); // Delay of 300 milliseconds (0.3 seconds)
-        } else {
-          // Remove the cursor after typing animation completes
-          setTimeout(function() {
-            helloWorldText.style.borderRight = "none";
-          }, 300); // Delay of 300 milliseconds (0.3 seconds)
-
-          // Trigger the explosion effect after removing the cursor
-          setTimeout(function() {
-            helloWorldText.style.animation = "explode 0.8s forwards";
-          }, 500); // Delay of 500 milliseconds (0.5 seconds) before the explosion
-
-          // Show the official page content after 3 seconds
-          setTimeout(function() {
-            helloWorldText.style.display = "none"; // Hide the "Hello World!" text
-            officialPageContainer.style.display = "block"; // Show the official page content
-          }, 3000); // Delay of 3000 milliseconds (3 seconds) for showing the official page
-        }
-      }
-
-      typeText(0);
-    });
-  </script>
-</body>
-</html>
