@@ -28,6 +28,21 @@
       white-space: nowrap;
       border-right: 0.15em solid #fff;
     }
+    .official-page-container {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      z-index: 1;
+    }
+    .official-page-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
     @keyframes typing {
       from {
         width: 0;
@@ -49,9 +64,13 @@
   <div class="hello-world-container">
     <div class="hello-world-text"></div>
   </div>
+  <div class="official-page-container">
+    <iframe class="official-page-iframe" src="https://ldx967.github.io/helloworld"></iframe>
+  </div>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       var helloWorldText = document.querySelector(".hello-world-text");
+      var officialPageContainer = document.querySelector(".official-page-container");
       var textToType = "Hello World!";
       var index = 0;
 
@@ -73,10 +92,11 @@
             helloWorldText.style.animation = "explode 0.8s forwards";
           }, 500); // Delay of 500 milliseconds (0.5 seconds) before the explosion
 
-          // Redirect to full-screen embedded website after 3 seconds
+          // Show the official page content after 3 seconds
           setTimeout(function() {
-            window.location.href = "https://ldx967.github.io/helloworld";
-          }, 3000); // Delay of 3000 milliseconds (3 seconds) for redirection
+            helloWorldText.style.display = "none"; // Hide the "Hello World!" text
+            officialPageContainer.style.display = "block"; // Show the official page content
+          }, 3000); // Delay of 3000 milliseconds (3 seconds) for showing the official page
         }
       }
 
